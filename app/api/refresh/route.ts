@@ -15,10 +15,18 @@ export async function POST(req: Request) {
 
     const token = auth.split(" ")[1];
 
-    // ❌ This WILL throw for modified tokens
-    const payload = jwt.verify(token, SECRET);
+    // ❌ INTENTIONAL LOGIC FLAW (CTF)
+    // Token is decoded but NOT verified
+    const payload = jwt.decode(token);
 
-    // ❌ LOGIC FLAW (INTENTIONAL FOR CTF)
+    if (!payload || typeof payload !== "object") {
+      return NextResponse.json(
+        { error: "Invalid token payload" },
+        { status: 401 }
+      );
+    }
+
+    // ❌ Re-signing attacker-controlled claims
     const newToken = jwt.sign(payload, SECRET, {
       algorithm: "HS256",
       expiresIn: "1h",
