@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
-const SECRET = process.env.JWT_SECRET || "dev_secret";
+const SECRET = process.env.JWT_SECRET || "a_super_secret_key_for_my_ctf";
 
 export async function POST(req: Request) {
   try {
