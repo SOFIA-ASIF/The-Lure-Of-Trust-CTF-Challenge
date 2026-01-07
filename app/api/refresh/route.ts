@@ -6,17 +6,17 @@ const SECRET = process.env.JWT_SECRET || "a_super_secret_key_for_my_ctf";
 export async function POST(req: Request) {
   try {
     const auth = req.headers.get("authorization");
+
+    console.log("RAW AUTH:", auth);
+
     if (!auth) {
-      return NextResponse.json(
-        { error: "Missing token" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Missing token" }, { status: 401 });
     }
 
     const token = auth.split(" ")[1];
+    console.log("TOKEN:", token);
+    console.log("DECODED:", jwt.decode(token));
 
-    // ❌ INTENTIONAL LOGIC FLAW (CTF)
-    // Token is decoded but NOT verified
     const payload = jwt.decode(token);
 
     if (!payload || typeof payload !== "object") {
@@ -26,7 +26,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // ❌ Re-signing attacker-controlled claims
     const newToken = jwt.sign(payload, SECRET, {
       algorithm: "HS256",
       expiresIn: "1h",
@@ -34,9 +33,8 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ token: newToken });
   } catch (err) {
-    return NextResponse.json(
-      { error: "Invalid token" },
-      { status: 401 }
-    );
+    console.error("ERROR:", err);
+    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 }
+
