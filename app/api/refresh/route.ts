@@ -7,16 +7,13 @@ export async function POST(req: Request) {
   try {
     const auth = req.headers.get("authorization");
 
-    console.log("RAW AUTH:", auth);
-
     if (!auth) {
       return NextResponse.json({ error: "Missing token" }, { status: 401 });
     }
 
     const token = auth.split(" ")[1];
-    console.log("TOKEN:", token);
-    console.log("DECODED:", jwt.decode(token));
 
+    // ❌ INTENTIONAL CTF FLAW
     const payload = jwt.decode(token);
 
     if (!payload || typeof payload !== "object") {
@@ -26,7 +23,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const newToken = jwt.sign(payload, SECRET, {
+    // 🔥 Remove existing JWT timestamps
+    const { iat, exp, ...trustedPayload } = payload as any;
+
+    // ❌ Re-sign attacker-controlled claims
+    const newToken = jwt.sign(trustedPayload, SECRET, {
       algorithm: "HS256",
       expiresIn: "1h",
     });
@@ -37,4 +38,3 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Invalid token" }, { status: 401 });
   }
 }
-
