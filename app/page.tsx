@@ -21,5 +21,5 @@ export default function Home() {
     window.location.href = "/dashboard";
   }
 
-  return <button onClick={login}>Login</button>;
+  return <button onClick={login} className="flex justify-center items-center">Login</button>;
 }

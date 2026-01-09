@@ -1,26 +1,61 @@
 @import "tailwindcss";
 
+/* Root colors and fonts */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #ffffff;
+  --primary: #4f46e5;       /* button color */
+  --primary-hover: #4338ca; /* hover color */
+  --font-sans: 'Arial', 'Helvetica', sans-serif;
+  --font-mono: 'Courier New', monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Dark mode (optional) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
     --foreground: #ededed;
+    --primary: #6366f1;
+    --primary-hover: #4f46e5;
   }
 }
 
+/* Global body styling with background image */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  height: 100vh;                  /* full viewport height */
+  display: flex;
+  justify-content: center;        /* horizontal center */
+  align-items: center;            /* vertical center */
+  font-family: var(--font-sans);
+  
+  /* Background image settings */
+  background-image: url('/public/Whitecapbayconceptart.webp'); /* replace with your image URL */
+  background-size: cover;         /* cover full screen */
+  background-position: center;    /* center image */
+  background-repeat: no-repeat;
+  background-attachment: fixed;   /* optional: makes background stay on scroll */
+}
+
+/* Button styling */
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: var(--primary);
+  color: #ffffff;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
